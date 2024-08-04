@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Gherkin" Version="28.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="Reqnroll.xUnit" Version="2.0.3" />
+    <PackageReference Include="Verify.Xunit" Version="26.1.5" />
+    <PackageReference Include="xunit" Version="2.9.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+    <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="feature2markdown.feature" />
+    <None Include="Features\Mediatr.feature" />
+    <None Include="Features\SourceSelection.feature" />
+    <None Update="tes.feature.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Test.Testing.verified.txt">
+      <ParentFile>Test</ParentFile>
+      <DependentUpon>NamespaceParsing.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\App\App.csproj" />
+    <ProjectReference Include="..\TestCode\TestCode.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Validation">
+      <HintPath>bin\Debug\net8.0\Validation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Features\Mediatr.feature.cs">
+      <DependentUpon>Mediatr.feature</DependentUpon>
+      <AutoGen>true</AutoGen>
+      <DesignTime>true</DesignTime>
+      <Visible>true</Visible>
+    </Compile>
+  </ItemGroup>
+
+</Project>
