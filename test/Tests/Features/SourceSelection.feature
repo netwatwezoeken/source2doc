@@ -3,7 +3,7 @@ Feature: SourceSelection
 Selection of source files to include into the analysis
 
 Scenario: Single folder
-	Given a compiler with path "../../../../TestCode"
+	Given source code "../../../../TestCode"
     And analyzer is configured
 	When code is analyzed
 	Then the result should be 2 symbols

@@ -18,7 +18,7 @@ public sealed class SourceSelectionStepDefinitions
         _unitTestRuntimeProvider = unitTestRuntimeProvider;
     }
     
-    [Given("a compiler with path {string} and mediatr libs")]
+    [Given("source code {string} and mediatr libs")]
     public async Task GivenASinglePathAndMediatrLibs(string path)
     {
         var baseDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -33,7 +33,7 @@ public sealed class SourceSelectionStepDefinitions
         await _compiler.Initialize();
     }
     
-    [Given("a compiler with path {string}")]
+    [Given("source code {string}")]
     public async Task GivenASinglePath(string path)
     {
         var baseDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -93,5 +93,25 @@ public sealed class SourceSelectionStepDefinitions
     public void NumberOfDependencies(string from, string to)
     {
         Assert.Contains(Analyzer.Dependencies, d => d.From.Name == from && d.To.Name == to);
+    }
+    
+    [Then("{string} is an event")]
+    public void IsAnEvent(string className)
+    {
+        IsAn(className, Type.Event);
+    }
+    
+    [Then("{string} is a publisher")]
+    public void IsAPublisher(string className)
+    {
+        IsAn(className, Type.Publisher);
+    }
+    
+    private void IsAn(string className, Type type)
+    {
+        var dep = Analyzer.Dependencies.FirstOrDefault(
+            d => d.From.Name == className)?.From ?? Analyzer.Dependencies.First(
+            d => d.To.Name == className).To;
+        Assert.True(dep.Type == type);
     }
 }
