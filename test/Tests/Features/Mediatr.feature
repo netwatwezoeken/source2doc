@@ -6,7 +6,7 @@ Background:
 	
 Scenario: Notification publishers
 	When code is analyzed
-	Then 12 dependencies are created
+	Then 15 dependencies are created
 
 Scenario Outline: Classes that throw events are detected
 	When code is analyzed
@@ -18,10 +18,15 @@ Scenario Outline: Classes that throw events are detected
 	  | "SenderA2"                     | "NotificationA"         |
 	  | "NotificationA"                | "NotificationAHandler1" |
    
-Scenario Outline: Event handlers are detected
+Scenario: Event handlers are detected
 	When code is analyzed
 	Then dependency "NotificationA" to "NotificationAHandler1" is listed
-
+	
+Scenario: Event handlers can handle multiple events
+	When code is analyzed
+	Then dependency "CommandA" to "CommandAHandler2" is listed
+	And dependency "CommandB" to "CommandAHandler2" is listed
+	
 Scenario: Classes that derive from classes that throw events are detected
 	When code is analyzed
 	Then dependency "DerivedSenderA1" to "SenderA1" is listed

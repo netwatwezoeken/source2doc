@@ -23,8 +23,8 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                 await FindEventThrowers(matchedEvent, eventThrowwers);
 
                 foreach (var handler in eventHandlers.Select(e => (ITypeSymbol)e)
-                             .Where(e => e.AllInterfaces.FirstOrDefault()?.TypeArguments.FirstOrDefault()?.Name ==
-                                         matchedEvent.Name))
+                             .Where(e => e.AllInterfaces.Any(i => i.TypeArguments.FirstOrDefault()?.Name ==
+                                         matchedEvent.Name)))
                 {
                     Dependencies.Add(new Dependency(new CSharpType(symbol.Name, Type.Event), 
                         new CSharpType(handler.Name, Type.Handler), null));

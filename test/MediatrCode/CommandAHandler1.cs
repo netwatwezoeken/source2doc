@@ -10,31 +10,3 @@ public class CommandAHandler1 : IRequestHandler<CommandA>
         return Task.CompletedTask;
     }
 }
-
-public class RequestAHandler1 : IRequestHandler<RequestA, ResponseA>
-{
-    public async Task<ResponseA> Handle(RequestA request, CancellationToken cancellationToken)
-    {
-        return new ResponseA();
-    }
-}
-
-public class RequestAHandler2 : IRequestHandler<RequestA, ResponseA>
-{
-    public async Task<ResponseA> Handle(RequestA request, CancellationToken cancellationToken)
-    {
-        return new ResponseA();
-    }
-}
-
-public class RequestA : IRequest<ResponseA>
-{
-}
-
-public class ResponseA
-{
-}
-
-public class CommandA : IRequest
-{
-}
