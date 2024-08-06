@@ -44,6 +44,12 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
             .SelectMany(u => u.Locations);
         foreach (var loc in locations)
         {
+            // ignore references that call a base contructor
+            if(loc.Location.SourceTree != null && 
+               loc.Location.SourceTree.GetTextAsync().Result.GetSubText(loc.Location.SourceSpan).ToString().StartsWith("base"))
+            {
+                continue;
+            }
             try
             {
                 var throwerSymbol = compiler.Symbols.Single(s =>
