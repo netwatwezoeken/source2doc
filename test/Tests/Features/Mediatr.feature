@@ -51,3 +51,14 @@ Scenario Outline: Classes that are publisher are labeled so
 	  | "SenderA2"                     |
 	  | "DerivedSenderA1"              |
 	  | "DerivedSenderA1ThatOverrides" |
+
+
+Scenario Outline: Classes that are handlers are labeled so
+	When code is analyzed
+	Then <class> is a handler
+	
+	Examples:
+	  | class                   |
+	  | "NotificationAHandler1" |
+	  | "CommandAHandler1"      |
+	  | "RequestAHandler1"      |

@@ -98,16 +98,22 @@ public sealed class SourceSelectionStepDefinitions
     [Then("{string} is an event")]
     public void IsAnEvent(string className)
     {
-        IsAn(className, Type.Event);
+        IsA(className, Type.Event);
     }
     
     [Then("{string} is a publisher")]
     public void IsAPublisher(string className)
     {
-        IsAn(className, Type.Publisher);
+        IsA(className, Type.Publisher);
     }
     
-    private void IsAn(string className, Type type)
+    [Then("{string} is a handler")]
+    public void IsAHandler(string className)
+    {
+        IsA(className, Type.Handler);
+    }
+    
+    private void IsA(string className, Type type)
     {
         var dep = Analyzer.Dependencies.FirstOrDefault(
             d => d.From.Name == className)?.From ?? Analyzer.Dependencies.First(
