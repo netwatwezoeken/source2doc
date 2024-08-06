@@ -59,7 +59,7 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                         && _.Span.End >= loc.Location.SourceSpan.End));
                 eventThrowwers.Add(new Dependency(new CSharpType(throwerSymbol.Name, Type.Publisher),
                     new CSharpType(matchedEvent.Name, Type.Event),
-                    loc.Location.GetMappedLineSpan().StartLinePosition.ToDomain()));
+                    loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
             }
             catch (Exception e)
             {
@@ -67,28 +67,32 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                 var throwerSymbol = compiler.Symbols.First(s =>
                     s.DeclaringSyntaxReferences.Any(_ =>
                         _.SyntaxTree.FilePath == loc.Document.Name
+                        && loc.Location != null
                         && _.Span.Start <= loc.Location.SourceSpan.Start
                         && _.Span.End >= loc.Location.SourceSpan.End));
                 eventThrowwers.Add(new Dependency(new CSharpType(throwerSymbol.Name, Type.Publisher),
                     new CSharpType(matchedEvent.Name, Type.Event),
-                    loc.Location.GetMappedLineSpan().StartLinePosition.ToDomain()));
+                    loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
             }
         }
     }
 
     private async Task AddDerivedClasses()
     {
-        var derivateDependencies = new List<Dependency>();
+        var derivateDependencies = new HashSet<Dependency>();
         foreach (var dependency in Dependencies)
         {
             var symbol = compiler.Symbols.FirstOrDefault(s => s.Name == dependency.From.Name);
             if (symbol == null) continue;
             var derivatives = await SymbolFinder.FindDerivedClassesAsync(symbol, workspace.CurrentSolution);
-            derivateDependencies.AddRange(derivatives.Select(derivative => 
-                new Dependency(new CSharpType(derivative.Name, dependency.From.Type), dependency.From, null)));
+            foreach (var derivative in derivatives.Select(derivative => 
+                         new Dependency(new CSharpType(derivative.Name, dependency.From.Type), dependency.From, null)))
+            {
+                derivateDependencies.Add(derivative);
+            }
         }
         Dependencies.AddRange(derivateDependencies);
     }
 
-    public static List<Dependency> Dependencies { get; set; } = new ();
+    public List<Dependency> Dependencies { get; set; } = new ();
 }
