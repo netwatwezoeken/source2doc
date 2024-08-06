@@ -69,7 +69,7 @@ public class Compiler(string path, string[] assemblyFiles)
     
     private void GetSymbols(Compilation compilation)
     {
-        List<INamespaceSymbol> namespaces = [];
+        HashSet<INamespaceSymbol> namespaces = [];
         AddNamespaceRecursive(compilation.GlobalNamespace, namespaces);
         List<INamedTypeSymbol> symbols = [];
         foreach (var ns in namespaces)
@@ -107,8 +107,8 @@ public class Compiler(string path, string[] assemblyFiles)
         //     .Where(type => !type.Locations.Any(l => l.Kind != LocationKind.SourceFile));
     }
 
-    private void AddNamespaceRecursive(INamespaceSymbol namespaceSymbol, List<INamespaceSymbol> namespaceList)
-    {            
+    private void AddNamespaceRecursive(INamespaceSymbol namespaceSymbol, HashSet<INamespaceSymbol> namespaceList)
+    {
         foreach (var childNamespace in namespaceSymbol
                      .GetMembers().OfType<INamespaceSymbol>()
                      .Where(n => n.Locations.Any(l => l.Kind == LocationKind.SourceFile)))
