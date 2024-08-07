@@ -86,13 +86,13 @@ public sealed class SourceSelectionStepDefinitions
     [Then("{int} dependencies are created")]
     public void NumberOfDependencies(int number)
     {
-        Assert.Equal(number, Analyzer.Dependencies.Count());
+        Assert.Equal(number, _analyzer.Dependencies.Count());
     }
     
     [Then("dependency {string} to {string} is listed")]
     public void NumberOfDependencies(string from, string to)
     {
-        Assert.Contains(Analyzer.Dependencies, d => d.From.Name == from && d.To.Name == to);
+        Assert.Contains(_analyzer.Dependencies, d => d.From.Name == from && d.To.Name == to);
     }
     
     [Then("{string} is an event")]
@@ -115,8 +115,8 @@ public sealed class SourceSelectionStepDefinitions
     
     private void IsA(string className, Type type)
     {
-        var dep = Analyzer.Dependencies.FirstOrDefault(
-            d => d.From.Name == className)?.From ?? Analyzer.Dependencies.First(
+        var dep = _analyzer.Dependencies.FirstOrDefault(
+            d => d.From.Name == className)?.From ?? _analyzer.Dependencies.First(
             d => d.To.Name == className).To;
         Assert.True(dep.Type == type);
     }
