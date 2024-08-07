@@ -15,6 +15,7 @@
         <PackageProjectUrl>https://github.com/netwatwezoeken/source2doc</PackageProjectUrl>
         <RepositoryUrl>https://github.com/netwatwezoeken/source2doc</RepositoryUrl>
         <PackageTags>livingdoc</PackageTags>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
     
     <ItemGroup>

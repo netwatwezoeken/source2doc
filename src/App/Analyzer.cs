@@ -45,8 +45,12 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
         foreach (var loc in locations)
         {
             // ignore references that call a base constructor
-            if(loc.Location.SourceTree != null && 
-               loc.Location.SourceTree.GetTextAsync().Result.GetSubText(loc.Location.SourceSpan).ToString().StartsWith("base"))
+            if (loc.Location?.SourceTree == null || loc.Location?.SourceSpan == null)
+            {
+                continue;
+            }
+            if(
+               (await loc.Location.SourceTree.GetTextAsync()).GetSubText(loc.Location.SourceSpan).ToString().StartsWith("base"))
             {
                 continue;
             }
@@ -61,7 +65,7 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                     new CSharpType(matchedEvent.Name, Type.Event),
                     loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
             }
-            catch (Exception e)
+            catch (InvalidOperationException)
             {
                 Console.WriteLine($"Multiple matches on {loc.Document.Name}");
                 var throwerSymbol = compiler.Symbols.First(s =>

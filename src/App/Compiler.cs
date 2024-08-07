@@ -34,6 +34,9 @@ public class Compiler(string path, string[] assemblyFiles)
                 .Aggregate(project, (current, metaref) => current.AddMetadataReference(metaref));
 
         var comp = await project.GetCompilationAsync().ConfigureAwait(false);
+
+        if (comp == null) throw new Exception("Could not get compilation");
+        
         GetSymbols(comp);
         return (comp, workspace);
     }
@@ -86,25 +89,11 @@ public class Compiler(string path, string[] assemblyFiles)
     {
         foreach (var type in ns.GetTypeMembers().OfType<INamedTypeSymbol>())
         {
-            if (type.Locations.Any(l => l.Kind == LocationKind.MetadataFile))
-            {
-                var loc = type.Locations.First(l => l.Kind == LocationKind.MetadataFile);
-                var meta = loc.MetadataModule.GetMetadata();
-                // if (!assemblies.Any(n => n.Display.EndsWith(meta.Name)))
-                //     continue;
-            }
-            else if (type.Locations.Any(l => l.Kind != LocationKind.SourceFile))
+            if (type.Locations.Any(l => l.Kind != LocationKind.SourceFile))
                 continue;
 
-            // if (type.DeclaredAccessibility == Accessibility.Private)
-            //     continue;
-            // if (type.DeclaredAccessibility == Accessibility.Internal)
-            //     continue;
             yield return type;
         }
-        
-        // return ns.GetTypeMembers().OfType<INamedTypeSymbol>()
-        //     .Where(type => !type.Locations.Any(l => l.Kind != LocationKind.SourceFile));
     }
 
     private void AddNamespaceRecursive(INamespaceSymbol namespaceSymbol, HashSet<INamespaceSymbol> namespaceList)
