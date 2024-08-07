@@ -12,6 +12,9 @@
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://github.com/netwatwezoeken/source2doc</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/netwatwezoeken/source2doc</RepositoryUrl>
+        <PackageTags>livingdoc</PackageTags>
     </PropertyGroup>
     
     <ItemGroup>
