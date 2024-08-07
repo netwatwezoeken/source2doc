@@ -11,30 +11,30 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
         var eventThrowwers = new HashSet<Dependency>();
 
         var eventSymbols = compiler.Symbols.Where(s =>
-            s.AllInterfaces.Select(i => $"{i.FullNamespace()}.{i.Name}").Any(events.Contains));
+            s.AllInterfaces.Select(i => $"{i.FullNamespace()}.{i.Name}").Any(events.Contains))
+            .ToDictionary(e => e.Name, e => e);
         var eventHandlers = compiler.Symbols.Where(s =>
             s.AllInterfaces.Select(i => $"{i.FullNamespace()}.{i.Name}").Any(handlers.Contains)); ;
         
         foreach (var symbol in compiler.Symbols)
         {
-            var matchedEvents = eventSymbols.Where(s => s.Name == symbol.Name);
-            foreach (var matchedEvent in matchedEvents)
-            {
-                await FindEventThrowers(matchedEvent, eventThrowwers);
+            if (!eventSymbols.TryGetValue(symbol.Name, out var matchedEvent))
+                continue;
 
-                foreach (var handler in eventHandlers.Select(e => (ITypeSymbol)e)
-                             .Where(e => e.AllInterfaces.Any(i => i.TypeArguments.FirstOrDefault()?.Name ==
-                                         matchedEvent.Name)))
-                {
-                    Dependencies.Add(new Dependency(new CSharpType(symbol.Name, Type.Event), 
-                        new CSharpType(handler.Name, Type.Handler), null));
-                }
+            await FindEventThrowers(matchedEvent, eventThrowwers);
+
+            foreach (var handler in eventHandlers.Select(e => (ITypeSymbol)e)
+                         .Where(e => e.AllInterfaces.Any(i => i.TypeArguments.FirstOrDefault()?.Name ==
+                                                              matchedEvent.Name)))
+            {
+                Dependencies.Add(new Dependency(new CSharpType(symbol.Name, Type.Event), 
+                    new CSharpType(handler.Name, Type.Handler), null));
             }
         }
         Dependencies.AddRange(eventThrowwers.ToList());
         
         await AddDerivedClasses();
-      }
+    }
 
     private async Task FindEventThrowers(INamedTypeSymbol matchedEvent, HashSet<Dependency> eventThrowwers)
     {
@@ -44,7 +44,7 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
             .SelectMany(u => u.Locations);
         foreach (var loc in locations)
         {
-            // ignore references that call a base contructor
+            // ignore references that call a base constructor
             if(loc.Location.SourceTree != null && 
                loc.Location.SourceTree.GetTextAsync().Result.GetSubText(loc.Location.SourceSpan).ToString().StartsWith("base"))
             {
