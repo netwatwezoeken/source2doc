@@ -14,7 +14,7 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
             s.AllInterfaces.Select(i => $"{i.FullNamespace()}.{i.Name}").Any(events.Contains))
             .ToDictionary(e => e.Name, e => e);
         var eventHandlers = compiler.Symbols.Where(s =>
-            s.AllInterfaces.Select(i => $"{i.FullNamespace()}.{i.Name}").Any(handlers.Contains)); ;
+            s.AllInterfaces.Select(i => $"{i.FullNamespace()}.{i.Name}").Any(handlers.Contains));
         
         foreach (var symbol in compiler.Symbols)
         {

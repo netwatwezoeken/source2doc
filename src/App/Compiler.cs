@@ -89,7 +89,8 @@ public class Compiler(string path, string[] assemblyFiles)
     {
         foreach (var type in ns.GetTypeMembers().OfType<INamedTypeSymbol>())
         {
-            if (type.Locations.Any(l => l.Kind != LocationKind.SourceFile))
+            if (type.Locations.Any(l => l.Kind != LocationKind.SourceFile 
+                                        && l.Kind != LocationKind.MetadataFile))
                 continue;
 
             yield return type;
