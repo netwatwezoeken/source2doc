@@ -3,24 +3,30 @@ Feature: Mediatr
 Background:
 	Given source code "../../../../MediatrCode" and mediatr libs
 	And analyzer is configured for Mediatr
-	
-Scenario: Notification publishers
+
+Scenario: Amount of dependencies
 	When code is analyzed
 	Then 15 dependencies are created
+	
+Scenario: Amount of types
+	When code is analyzed
+	Then 17 types are created
 
 Scenario Outline: Classes that throw events are detected
 	When code is analyzed
 	Then dependency <from> to <to> is listed
+	And class <from> is of type <type>
 
 	Examples:
-	  | from                           | to                      |
-	  | "SenderA1"                     | "NotificationA"         |
-	  | "SenderA2"                     | "NotificationA"         |
-	  | "NotificationA"                | "NotificationAHandler1" |
+	  | from       | to              | type        |
+	  | "SenderA1" | "NotificationA" | "Publisher" |
+	  | "SenderA2" | "NotificationA" | "Publisher" |
+	  | "SenderB2" | "CommandB"      | "Publisher" |
    
 Scenario: Event handlers are detected
 	When code is analyzed
 	Then dependency "NotificationA" to "NotificationAHandler1" is listed
+	And class "NotificationAHandler1" is of type "Handler"
 	
 Scenario: Event handlers can handle multiple events
 	When code is analyzed
@@ -30,10 +36,12 @@ Scenario: Event handlers can handle multiple events
 Scenario: Classes that derive from classes that throw events are detected
 	When code is analyzed
 	Then dependency "DerivedSenderA1" to "SenderA1" is listed
+	And class "DerivedSenderA1" is of type "Publisher"
 
 Scenario: Classes that derive from classes that throw events but override the throw are detected
 	When code is analyzed
 	Then dependency "DerivedSenderA1ThatOverrides" to "NotificationB" is listed
+	And class "DerivedSenderA1ThatOverrides" is of type "Publisher"
 	
 Scenario Outline: Classes that are events are labeled so
 	When code is analyzed
@@ -44,7 +52,6 @@ Scenario Outline: Classes that are events are labeled so
 	  | "NotificationA"        |
 	  | "NotificationB"        |
 	  | "DerivedNotificationA" |
-   
 	
 Scenario Outline: Classes that are publisher are labeled so
 	When code is analyzed
@@ -56,7 +63,6 @@ Scenario Outline: Classes that are publisher are labeled so
 	  | "SenderA2"                     |
 	  | "DerivedSenderA1"              |
 	  | "DerivedSenderA1ThatOverrides" |
-
 
 Scenario Outline: Classes that are handlers are labeled so
 	When code is analyzed

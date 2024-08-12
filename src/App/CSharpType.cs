@@ -1,6 +1,8 @@
 namespace App;
 
-public record CSharpType(string Name, Type Type = Type.NotSpecified);
+public record CSharpTypeIdentifier(string Namespace, string Name);
+
+public record CSharpType(CSharpTypeIdentifier Id, Type Type = Type.NotSpecified);
 
 public enum Type
 {

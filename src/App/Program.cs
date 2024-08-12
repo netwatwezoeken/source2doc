@@ -55,7 +55,7 @@ internal static class Program
             Console.WriteLine("flowchart LR;");
             foreach (var dependency in group)
             {
-                Console.WriteLine($"    {dependency.From.Name}-->{dependency.To.Name};");
+                Console.WriteLine($"    {dependency.From.Id}-->{dependency.To.Id};");
             }
             Console.WriteLine("```");
         }

@@ -27,10 +27,10 @@ public static class Grouping
                     dictionary[depKey] = true;
                     groupList.Add(depKey);
                     foreach (var thing in dictionary.Where(k =>
-                                 k.Key.From.Name == depKey.From.Name ||
-                                 k.Key.From.Name == depKey.To.Name ||
-                                 k.Key.To.Name == depKey.From.Name ||
-                                 k.Key.To.Name == depKey.To.Name
+                                 k.Key.From.Id == depKey.From.Id ||
+                                 k.Key.From.Id == depKey.To.Id ||
+                                 k.Key.To.Id == depKey.From.Id ||
+                                 k.Key.To.Id == depKey.To.Id
                              ))
                     {
                         AddRecursive(dictionary, thing.Key, groupList);

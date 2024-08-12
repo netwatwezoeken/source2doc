@@ -89,10 +89,22 @@ public sealed class SourceSelectionStepDefinitions
         Assert.Equal(number, _analyzer.Dependencies.Count());
     }
     
+    [Then("{int} types are created")]
+    public void NumberOfTypes(int number)
+    {
+        Assert.Equal(number, _analyzer.Types.Count());
+    }
+    
     [Then("dependency {string} to {string} is listed")]
     public void NumberOfDependencies(string from, string to)
     {
-        Assert.Contains(_analyzer.Dependencies, d => d.From.Name == from && d.To.Name == to);
+        Assert.Contains(_analyzer.Dependencies, d => d.From.Id.Name == from && d.To.Id.Name == to);
+    }
+    
+    [Then("class {string} is of type {string}")]
+    public void ClasIfType(string className, string type)
+    {
+        Assert.Equal(type, _analyzer.Types.FirstOrDefault(d => d.Id.Name == className)?.Type.ToString());
     }
     
     [Then("{string} is an event")]
@@ -115,9 +127,8 @@ public sealed class SourceSelectionStepDefinitions
     
     private void IsA(string className, Type type)
     {
-        var dep = _analyzer.Dependencies.FirstOrDefault(
-            d => d.From.Name == className)?.From ?? _analyzer.Dependencies.First(
-            d => d.To.Name == className).To;
-        Assert.True(dep.Type == type);
+        var dep = _analyzer.Types.FirstOrDefault(
+            d => d.Id.Name == className);
+        Assert.Equal(type, dep?.Type);
     }
 }

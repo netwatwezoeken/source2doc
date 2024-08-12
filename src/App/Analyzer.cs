@@ -27,10 +27,14 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                          .Where(e => e.AllInterfaces.Any(i => i.TypeArguments.FirstOrDefault()?.Name ==
                                                               matchedEvent.Name)))
             {
-                Dependencies.Add(new Dependency(new CSharpType(symbol.Name, Type.Event), 
-                    new CSharpType(handler.Name, Type.Handler), null));
+                var from = new CSharpType(new CSharpTypeIdentifier(symbol.FullNamespace(), symbol.Name), Type.Event);
+                Types.Add(from);
+                var to = new CSharpType(new CSharpTypeIdentifier(handler.FullNamespace(), handler.Name), Type.Handler);
+                Types.Add(to);
+                Dependencies.Add(new Dependency(from, to, null));
             }
         }
+        
         Dependencies.AddRange(eventThrowwers.ToList());
         
         await AddDerivedClasses();
@@ -61,9 +65,11 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                         _.SyntaxTree.FilePath == loc.Document.Name
                         && _.Span.Start <= loc.Location.SourceSpan.Start
                         && _.Span.End >= loc.Location.SourceSpan.End));
-                eventThrowwers.Add(new Dependency(new CSharpType(throwerSymbol.Name, Type.Publisher),
-                    new CSharpType(matchedEvent.Name, Type.Event),
-                    loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
+                var from = new CSharpType(new CSharpTypeIdentifier(throwerSymbol.FullNamespace(), throwerSymbol.Name), Type.Publisher);
+                Types.Add(from);
+                var to = new CSharpType(new CSharpTypeIdentifier(matchedEvent.FullNamespace(), matchedEvent.Name), Type.Event);
+                Types.Add(to);
+                eventThrowwers.Add(new Dependency(from, to, loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
             }
             catch (InvalidOperationException)
             {
@@ -74,9 +80,12 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                         && loc.Location != null
                         && _.Span.Start <= loc.Location.SourceSpan.Start
                         && _.Span.End >= loc.Location.SourceSpan.End));
-                eventThrowwers.Add(new Dependency(new CSharpType(throwerSymbol.Name, Type.Publisher),
-                    new CSharpType(matchedEvent.Name, Type.Event),
-                    loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
+                
+                var from = new CSharpType(new CSharpTypeIdentifier(throwerSymbol.FullNamespace(), throwerSymbol.Name), Type.Event);
+                Types.Add(from);
+                var to = new CSharpType(new CSharpTypeIdentifier(matchedEvent.FullNamespace(), matchedEvent.Name), Type.Handler);
+                Types.Add(to);
+                eventThrowwers.Add(new Dependency(from, to, loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
             }
         }
     }
@@ -86,12 +95,13 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
         var derivateDependencies = new HashSet<Dependency>();
         foreach (var dependency in Dependencies)
         {
-            var symbol = compiler.Symbols.FirstOrDefault(s => s.Name == dependency.From.Name);
+            var symbol = compiler.Symbols.FirstOrDefault(s => s.Name == dependency.From.Id.Name);
             if (symbol == null) continue;
             var derivatives = await SymbolFinder.FindDerivedClassesAsync(symbol, workspace.CurrentSolution);
             foreach (var derivative in derivatives.Select(derivative => 
-                         new Dependency(new CSharpType(derivative.Name, dependency.From.Type), dependency.From, null)))
+                         new Dependency(new CSharpType(new CSharpTypeIdentifier(derivative.FullNamespace(), derivative.Name), dependency.From.Type), dependency.From, null)))
             {
+                Types.Add(derivative.From);
                 derivateDependencies.Add(derivative);
             }
         }
@@ -99,4 +109,6 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
     }
 
     public List<Dependency> Dependencies { get; set; } = new ();
+    
+    public HashSet<CSharpType> Types { get; set; } = new HashSet<CSharpType>();
 }
