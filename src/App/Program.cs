@@ -43,7 +43,7 @@ internal static class Program
         var analyzer = new Analyzer(compiler.Workspace, compiler, 
             opts.Events.ToArray(), opts.Handlers.ToArray());
         await analyzer.Analyze();
-        var groups = Grouping.GroupDependencies(analyzer.Dependencies);
+        var groups = Grouping.GroupDependencies(analyzer.Data);
 
         using var renderer = new MermaidMarkdown();
         var stream = await renderer.Render(groups);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Reqnroll.Assist;
 
 namespace Tests.StepDefinitions;
@@ -12,21 +13,22 @@ public sealed class GroupingStepDefinitions
         Service.Instance.ValueRetrievers.Register(new CSharpTypeRetriever());
     }
     
-    private Compiler _compiler;
-    private Analyzer _analyzer;
-    private IEnumerable<Dependency> _dependencyList;
     private DependencyModel _dependenciyGroups;
+    private DependencyGroup _unsortedGroup;
 
     [Given(@"these dependencies")]
     public void GivenTheseDependencies(DataTable table)
     {
-        _dependencyList = table.CreateSet<Dependency>();
+         var dependencyList = table.CreateSet<Dependency>();
+        _unsortedGroup = new DependencyGroup(
+            new List<CSharpType>(), 
+            dependencyList.ToList());
     }
     
     [When(@"grouped")]
     public void GivenTheseDependencies()
     {
-        _dependenciyGroups = Grouping.GroupDependencies(_dependencyList);
+        _dependenciyGroups = Grouping.GroupDependencies(_unsortedGroup);
     }
     
     [Then(@"{int} groups exist")]

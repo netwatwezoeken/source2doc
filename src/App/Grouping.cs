@@ -2,7 +2,12 @@ namespace App;
 
 public static class Grouping
 {
-    public static DependencyModel GroupDependencies(IEnumerable<Dependency> dependencies)
+    public static DependencyModel GroupDependencies(DependencyGroup dependencies)
+    {
+        return GroupDependencies(dependencies.Dependencies);
+    }
+
+    private static DependencyModel GroupDependencies(IEnumerable<Dependency> dependencies)
     {
         var depGroups = new DependencyModel(new List<DependencyGroup>{});
         var dict = dependencies.ToDictionary(h => h, h => false);

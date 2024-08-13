@@ -88,31 +88,31 @@ public sealed class SourceSelectionStepDefinitions
     [Then("{int} dependencies are created")]
     public void NumberOfDependencies(int number)
     {
-        Assert.Equal(number, _analyzer.Dependencies.Count());
+        Assert.Equal(number, _analyzer.Data.Dependencies.Count());
     }
     
     [Then("{int} types are created")]
     public void NumberOfTypes(int number)
     {
-        Assert.Equal(number, _analyzer.Types.Count());
+        Assert.Equal(number, _analyzer.Data.Types.Count());
     }
     
     [Then("dependency {string} to {string} is listed")]
     public void NumberOfDependencies(string from, string to)
     {
-        Assert.Contains(_analyzer.Dependencies, d => d.From.Id.Name == from && d.To.Id.Name == to);
+        Assert.Contains(_analyzer.Data.Dependencies, d => d.From.Id.Name == from && d.To.Id.Name == to);
     }
     
     [Then("class {string} is of type {string}")]
     public void ClasIfType(string className, string type)
     {
-        Assert.Equal(type, _analyzer.Types.FirstOrDefault(d => d.Id.Name == className)?.Type.ToString());
+        Assert.Equal(type, _analyzer.Data.Types.FirstOrDefault(d => d.Id.Name == className)?.Type.ToString());
     }
     
     [Then("class verify mermaid")]
     public async Task verifyMermaid()
     {
-        var groups = Grouping.GroupDependencies(_analyzer.Dependencies);
+        var groups = Grouping.GroupDependencies(_analyzer.Data);
 
         using var renderer = new MermaidMarkdown();
         var stream = await renderer.Render(groups);
@@ -142,7 +142,7 @@ public sealed class SourceSelectionStepDefinitions
     
     private void IsA(string className, Type type)
     {
-        var dep = _analyzer.Types.FirstOrDefault(
+        var dep = _analyzer.Data.Types.FirstOrDefault(
             d => d.Id.Name == className);
         Assert.Equal(type, dep?.Type);
     }
