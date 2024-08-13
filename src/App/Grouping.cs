@@ -28,10 +28,10 @@ public static class Grouping
                     groupList.Add(depKey);
                     group.Dependencies.Add(depKey);
                     foreach (var thing in dictionary.Where(k =>
-                        k.Key.From == depKey.From ||
-                        k.Key.From == depKey.To ||
-                        k.Key.To == depKey.From ||
-                        k.Key.To == depKey.To
+                                 k.Key.From == depKey.From ||
+                                 k.Key.From == depKey.To ||
+                                 k.Key.To == depKey.From ||
+                                 k.Key.To == depKey.To
                              ))
                     {
                         AddRecursive(dictionary, thing.Key, groupList);
@@ -41,10 +41,12 @@ public static class Grouping
 
             if (closeGroup)
             {
-                depGroups.Groups.Add(group);
+                var sortedGroup = group with {Dependencies = 
+                    group.Dependencies.OrderBy(d => d.From.Id.ToString()).ToList()};
+                depGroups.Groups.Add(sortedGroup);
             }
         }
-
+        
         return depGroups;
     }
 }
