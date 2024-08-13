@@ -76,4 +76,4 @@ Scenario Outline: Classes that are handlers are labeled so
 
 Scenario: Output mermaid markdown
 	When code is analyzed
-	Then class verify mermaid
+	Then mermaid markdown can be generated

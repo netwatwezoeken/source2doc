@@ -18,7 +18,7 @@ public class MermaidMarkdown : IRenderer
             await writer.WriteLineAsync("flowchart LR;");
             foreach (var dependency in group.Dependencies)
             {
-                await writer.WriteLineAsync($"    {dependency.From}-->{dependency.To};");
+                await writer.WriteLineAsync($"    {dependency.From.Id}-->{dependency.To.Id};");
             }
             await writer.WriteLineAsync("```");
         }

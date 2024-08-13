@@ -14,6 +14,7 @@ public sealed class SourceSelectionStepDefinitions
     private Compiler _compiler;
     private readonly IUnitTestRuntimeProvider _unitTestRuntimeProvider;
     private Analyzer _analyzer;
+    private string _output;
 
     public SourceSelectionStepDefinitions(IUnitTestRuntimeProvider unitTestRuntimeProvider)
     {
@@ -109,17 +110,15 @@ public sealed class SourceSelectionStepDefinitions
         Assert.Equal(type, _analyzer.Data.Types.FirstOrDefault(d => d.Id.Name == className)?.Type.ToString());
     }
     
-    [Then("class verify mermaid")]
-    public async Task verifyMermaid()
+    [Then("mermaid markdown can be generated")]
+    public async Task RenderMermaidMarkdown()
     {
         var groups = Grouping.GroupDependencies(_analyzer.Data);
 
         using var renderer = new MermaidMarkdown();
         var stream = await renderer.Render(groups);
-        var output = await new StreamReader(stream).ReadToEndAsync();
-       // await Verify(output);
-        await Verifier.Verify(output);
-        //Assert.Equal("", output);
+        _output = await new StreamReader(stream).ReadToEndAsync();
+        await Verifier.Verify(_output);
     }
     
     [Then("{string} is an event")]
