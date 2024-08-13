@@ -2,7 +2,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using App.Renderers;
 using Reqnroll.UnitTestProvider;
+using VerifyXunit;
 
 namespace Tests.StepDefinitions;
 
@@ -105,6 +107,19 @@ public sealed class SourceSelectionStepDefinitions
     public void ClasIfType(string className, string type)
     {
         Assert.Equal(type, _analyzer.Types.FirstOrDefault(d => d.Id.Name == className)?.Type.ToString());
+    }
+    
+    [Then("class verify mermaid")]
+    public async Task verifyMermaid()
+    {
+        var groups = Grouping.GroupDependencies(_analyzer.Dependencies);
+
+        using var renderer = new MermaidMarkdown();
+        var stream = await renderer.Render(groups);
+        var output = await new StreamReader(stream).ReadToEndAsync();
+       // await Verify(output);
+        await Verifier.Verify(output);
+        //Assert.Equal("", output);
     }
     
     [Then("{string} is an event")]

@@ -2,19 +2,19 @@ namespace App;
 
 public static class Grouping
 {
-    public static IEnumerable<IEnumerable<Dependency>> GroupDependencies(IEnumerable<Dependency> dependencies)
+    public static DependencyModel GroupDependencies(IEnumerable<Dependency> dependencies)
     {
-        var depGroups = new List<List<Dependency>>();
+        var depGroups = new DependencyModel(new List<DependencyGroup>{});
         var dict = dependencies.ToDictionary(h => h, h => false);
-        // var dict = dependencies.ToDictionary(h => h , h => false);
         List<Dependency> groupList = [];
+        var group = new DependencyGroup(new List<CSharpType>(), new List<Dependency>());
         foreach (var dep in dict)
         {
             var closeGroup = false;
             if (!dict[dep.Key])
             {
                 closeGroup = true;
-                groupList = [];
+                group = new DependencyGroup(new List<CSharpType>(), new List<Dependency>());
             }
 
             AddRecursive(dict, dep.Key, groupList);
@@ -26,11 +26,12 @@ public static class Grouping
                 {
                     dictionary[depKey] = true;
                     groupList.Add(depKey);
+                    group.Dependencies.Add(depKey);
                     foreach (var thing in dictionary.Where(k =>
-                                 k.Key.From.Id == depKey.From.Id ||
-                                 k.Key.From.Id == depKey.To.Id ||
-                                 k.Key.To.Id == depKey.From.Id ||
-                                 k.Key.To.Id == depKey.To.Id
+                        k.Key.From == depKey.From ||
+                        k.Key.From == depKey.To ||
+                        k.Key.To == depKey.From ||
+                        k.Key.To == depKey.To
                              ))
                     {
                         AddRecursive(dictionary, thing.Key, groupList);
@@ -40,7 +41,7 @@ public static class Grouping
 
             if (closeGroup)
             {
-                depGroups.Add(groupList);
+                depGroups.Groups.Add(group);
             }
         }
 

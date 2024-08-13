@@ -73,3 +73,7 @@ Scenario Outline: Classes that are handlers are labeled so
 	  | "NotificationAHandler1" |
 	  | "CommandAHandler1"      |
 	  | "RequestAHandler1"      |
+
+Scenario: Output mermaid markdown
+	When code is analyzed
+	Then class verify mermaid

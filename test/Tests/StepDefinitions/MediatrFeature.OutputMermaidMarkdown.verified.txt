@@ -1,0 +1,21 @@
+﻿```mermaid
+flowchart LR;
+    CSharpType { Id = MediatrCode.CommandA, Type = Event }-->CSharpType { Id = MediatrCode.CommandAHandler1, Type = Handler };
+    CSharpType { Id = MediatrCode.CommandA, Type = Event }-->CSharpType { Id = MediatrCode.CommandAHandler2, Type = Handler };
+    CSharpType { Id = MediatrCode.CommandB, Type = Event }-->CSharpType { Id = MediatrCode.CommandAHandler2, Type = Handler };
+    CSharpType { Id = MediatrCode.Program, Type = Publisher }-->CSharpType { Id = MediatrCode.CommandA, Type = Event };
+    CSharpType { Id = MediatrCode.Program, Type = Publisher }-->CSharpType { Id = MediatrCode.RequestA, Type = Event };
+    CSharpType { Id = MediatrCode.RequestA, Type = Event }-->CSharpType { Id = MediatrCode.RequestAHandler1, Type = Handler };
+    CSharpType { Id = MediatrCode.RequestA, Type = Event }-->CSharpType { Id = MediatrCode.RequestAHandler2, Type = Handler };
+    CSharpType { Id = MediatrCode.SenderB2, Type = Publisher }-->CSharpType { Id = MediatrCode.CommandB, Type = Event };
+```
+```mermaid
+flowchart LR;
+    CSharpType { Id = MediatrCode.DerivedNotificationA, Type = Event }-->CSharpType { Id = MediatrCode.NotificationA, Type = Event };
+    CSharpType { Id = MediatrCode.DerivedSenderA1, Type = Publisher }-->CSharpType { Id = MediatrCode.SenderA1, Type = Publisher };
+    CSharpType { Id = MediatrCode.DerivedSenderA1ThatOverrides, Type = Publisher }-->CSharpType { Id = MediatrCode.SenderA1, Type = Publisher };
+    CSharpType { Id = MediatrCode.DerivedSenderA1ThatOverrides, Type = Publisher }-->CSharpType { Id = MediatrCode.NotificationB, Type = Event };
+    CSharpType { Id = MediatrCode.NotificationA, Type = Event }-->CSharpType { Id = MediatrCode.NotificationAHandler1, Type = Handler };
+    CSharpType { Id = MediatrCode.SenderA1, Type = Publisher }-->CSharpType { Id = MediatrCode.NotificationA, Type = Event };
+    CSharpType { Id = MediatrCode.SenderA2, Type = Publisher }-->CSharpType { Id = MediatrCode.NotificationA, Type = Event };
+```

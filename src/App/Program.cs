@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using App.Renderers;
 using CommandLine;
 
 namespace App;
@@ -44,21 +45,10 @@ internal static class Program
         await analyzer.Analyze();
         var groups = Grouping.GroupDependencies(analyzer.Dependencies);
 
-        Render(groups);
-    }
-
-    private static void Render(IEnumerable<IEnumerable<Dependency>> groups)
-    {
-        foreach (var group in groups)
-        {
-            Console.WriteLine("```mermaid");
-            Console.WriteLine("flowchart LR;");
-            foreach (var dependency in group)
-            {
-                Console.WriteLine($"    {dependency.From.Id}-->{dependency.To.Id};");
-            }
-            Console.WriteLine("```");
-        }
+        using var renderer = new MermaidMarkdown();
+        var stream = await renderer.Render(groups);
+        var output = await new StreamReader(stream).ReadToEndAsync();
+        Console.Write(output);
     }
 
     private static string ToAbsolutePath(this string input)
