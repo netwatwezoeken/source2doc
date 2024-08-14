@@ -1,25 +1,29 @@
 ﻿using System.Reflection;
 using App.Renderers;
 using CommandLine;
+using CommandLine.Text;
 
 namespace App;
 
 internal static class Program
 {
+    private static string _versionString = null!;
+
     private static async Task Main(string[] args)
     {
-        Parser.Default.ParseArguments<Options>(args)
-            .WithNotParsed(HandleParseError);
-        await Parser.Default.ParseArguments<Options>(args)
-            .WithParsedAsync(RunOptions);
+        var version = Assembly.GetEntryAssembly()?
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        _versionString = $"source2doc {version!.InformationalVersion}";
+        
+        var parser = new Parser(with => with.HelpWriter = null);
+        var t =  parser.ParseArguments<Options>(args);
+        await t.WithParsedAsync(RunOptions);
+        t.WithNotParsed(errs => DisplayHelp(t));
     }
 
     private static async Task RunOptions(Options opts)
     {
-        var versionString = Assembly.GetEntryAssembly()?
-            .GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-
-        Console.WriteLine($"source2doc v{versionString!.InformationalVersion}");
+        Console.WriteLine(_versionString);
         var sourcePath = opts.Source.ToAbsolutePath();
 
         if (!Path.Exists(sourcePath))
@@ -63,5 +67,17 @@ internal static class Program
     private static void HandleParseError(IEnumerable<Error> errs)
     {
         //handle errors
+    }
+    
+    static void DisplayHelp<T>(ParserResult<T> result)
+    {  
+        var helpText = HelpText.AutoBuild(result, h =>
+        {
+            h.AdditionalNewLineAfterOption = false;
+            h.Heading = _versionString;
+            h.Copyright = "Copyright (c) 2024 .NET wat we zoeken";
+            return HelpText.DefaultParsingErrorsHandler(result, h);
+        }, e => e);
+        Console.WriteLine(helpText);
     }
 }
