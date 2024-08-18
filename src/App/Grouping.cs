@@ -4,14 +4,8 @@ public static class Grouping
 {
     public static DependencyModel GroupDependencies(DependencyGroup dependencies)
     {
-        return GroupDependencies(dependencies.Dependencies);
-    }
-
-    private static DependencyModel GroupDependencies(IEnumerable<Dependency> dependencies)
-    {
         var depGroups = new DependencyModel(new List<DependencyGroup>{});
-        var dict = dependencies.ToDictionary(h => h, h => false);
-        List<Dependency> groupList = [];
+        var dict = dependencies.Dependencies.ToDictionary(h => h, h => false);
         var group = new DependencyGroup(new List<CSharpType>(), new List<Dependency>());
         foreach (var dep in dict)
         {
@@ -22,15 +16,14 @@ public static class Grouping
                 group = new DependencyGroup(new List<CSharpType>(), new List<Dependency>());
             }
 
-            AddRecursive(dict, dep.Key, groupList);
+            AddRecursive(dict, dep.Key);
 
             void AddRecursive(Dictionary<Dependency, bool> dictionary,
-                Dependency depKey, List<Dependency> groupList)
+                Dependency depKey)
             {
                 if (!dictionary[depKey])
                 {
                     dictionary[depKey] = true;
-                    groupList.Add(depKey);
                     group.Dependencies.Add(depKey);
                     foreach (var thing in dictionary.Where(k =>
                                  k.Key.From == depKey.From ||
@@ -39,15 +32,23 @@ public static class Grouping
                                  k.Key.To == depKey.To
                              ))
                     {
-                        AddRecursive(dictionary, thing.Key, groupList);
+                        AddRecursive(dictionary, thing.Key);
                     }
                 }
             }
 
             if (closeGroup)
             {
-                var sortedGroup = group with {Dependencies = 
-                    group.Dependencies.OrderBy(d => d.From.Id.ToString()).ToList()};
+                var deplist = group.Dependencies.Select(d => d.From).ToList();
+                deplist.AddRange(group.Dependencies.Select(d => d.To));
+
+                var types = dependencies.Types.Where(t =>
+                    deplist.Contains(t)).OrderBy(t => t.Id.ToString()).ToList();
+                
+                var sortedGroup = new DependencyGroup(
+                    Dependencies: group.Dependencies.OrderBy(d => d.From.Id.ToString()).ToList(), 
+                    Types: types.ToList());
+                
                 depGroups.Groups.Add(sortedGroup);
             }
         }

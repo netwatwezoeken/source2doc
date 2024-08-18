@@ -1,0 +1,406 @@
+﻿[
+  {
+    Types: [
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: CommandA
+        },
+        Type: Event
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: CommandAHandler1
+        },
+        Type: Handler
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: CommandAHandler2
+        },
+        Type: Handler
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: CommandB
+        },
+        Type: Event
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: Program
+        },
+        Type: Publisher
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: RequestA
+        },
+        Type: Event
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: RequestAHandler1
+        },
+        Type: Handler
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: RequestAHandler2
+        },
+        Type: Handler
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: SenderB2
+        },
+        Type: Publisher
+      }
+    ],
+    Dependencies: [
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: CommandA
+          },
+          Type: Event
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: CommandAHandler1
+          },
+          Type: Handler
+        },
+        Position: null
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: CommandA
+          },
+          Type: Event
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: CommandAHandler2
+          },
+          Type: Handler
+        },
+        Position: null
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: CommandB
+          },
+          Type: Event
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: CommandAHandler2
+          },
+          Type: Handler
+        },
+        Position: null
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: Program
+          },
+          Type: Publisher
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: CommandA
+          },
+          Type: Event
+        },
+        Position: {
+          Line: 20,
+          Character: 26
+        }
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: Program
+          },
+          Type: Publisher
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: RequestA
+          },
+          Type: Event
+        },
+        Position: {
+          Line: 21,
+          Character: 40
+        }
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: RequestA
+          },
+          Type: Event
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: RequestAHandler1
+          },
+          Type: Handler
+        },
+        Position: null
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: RequestA
+          },
+          Type: Event
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: RequestAHandler2
+          },
+          Type: Handler
+        },
+        Position: null
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: SenderB2
+          },
+          Type: Publisher
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: CommandB
+          },
+          Type: Event
+        },
+        Position: {
+          Line: 8,
+          Character: 29
+        }
+      }
+    ]
+  },
+  {
+    Types: [
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: DerivedNotificationA
+        },
+        Type: Event
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: DerivedSenderA1
+        },
+        Type: Publisher
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: DerivedSenderA1ThatOverrides
+        },
+        Type: Publisher
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: NotificationA
+        },
+        Type: Event
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: NotificationAHandler1
+        },
+        Type: Handler
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: NotificationB
+        },
+        Type: Event
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: SenderA1
+        },
+        Type: Publisher
+      },
+      {
+        Id: {
+          Namespace: MediatrCode,
+          Name: SenderA2
+        },
+        Type: Publisher
+      }
+    ],
+    Dependencies: [
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: DerivedNotificationA
+          },
+          Type: Event
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: NotificationA
+          },
+          Type: Event
+        },
+        Position: null
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: DerivedSenderA1
+          },
+          Type: Publisher
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: SenderA1
+          },
+          Type: Publisher
+        },
+        Position: null
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: DerivedSenderA1ThatOverrides
+          },
+          Type: Publisher
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: SenderA1
+          },
+          Type: Publisher
+        },
+        Position: null
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: DerivedSenderA1ThatOverrides
+          },
+          Type: Publisher
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: NotificationB
+          },
+          Type: Event
+        },
+        Position: {
+          Line: 18,
+          Character: 29
+        }
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: NotificationA
+          },
+          Type: Event
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: NotificationAHandler1
+          },
+          Type: Handler
+        },
+        Position: null
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: SenderA1
+          },
+          Type: Publisher
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: NotificationA
+          },
+          Type: Event
+        },
+        Position: {
+          Line: 8,
+          Character: 29
+        }
+      },
+      {
+        From: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: SenderA2
+          },
+          Type: Publisher
+        },
+        To: {
+          Id: {
+            Namespace: MediatrCode,
+            Name: NotificationA
+          },
+          Type: Event
+        },
+        Position: {
+          Line: 8,
+          Character: 29
+        }
+      }
+    ]
+  }
+]

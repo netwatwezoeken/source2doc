@@ -15,4 +15,16 @@ public class Options
     
     [Option('l', "libraries", Required = false, HelpText = "additional libraries to process.")]
     public IEnumerable<string> Libraries  { get; set; } = [];
+
+    [Option('f', "format", Required = false, HelpText = "'json' or 'mermaidmd'. (default is mermaidmd)")]
+    public Format Format { get; set; } = Format.MermaidMd;
+    
+    [Option('o', "output", Required = false, HelpText = "write to specified file")]
+    public string? File { get; set; }
+}
+
+public enum Format
+{
+    Json,
+    MermaidMd
 }

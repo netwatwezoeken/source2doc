@@ -112,5 +112,5 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
 
     private List<Dependency> Dependencies { get; set; } = new ();
     
-    private HashSet<CSharpType> Types { get; set; } = new HashSet<CSharpType>();
+    private HashSet<CSharpType> Types { get; set; } = new ();
 }

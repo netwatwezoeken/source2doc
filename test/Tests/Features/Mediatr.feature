@@ -77,3 +77,7 @@ Scenario Outline: Classes that are handlers are labeled so
 Scenario: Output mermaid markdown
 	When code is analyzed
 	Then mermaid markdown can be generated
+	
+Scenario: Output json
+	When code is analyzed
+	Then json can be generated

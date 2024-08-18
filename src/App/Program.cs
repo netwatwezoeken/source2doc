@@ -14,8 +14,12 @@ internal static class Program
         var version = Assembly.GetEntryAssembly()?
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>();
         _versionString = $"source2doc {version!.InformationalVersion}";
-        
-        var parser = new Parser(with => with.HelpWriter = null);
+
+        var parser = new Parser(with =>
+        {
+            with.HelpWriter = null;
+            with.CaseInsensitiveEnumValues = true;
+        });
         var t =  parser.ParseArguments<Options>(args);
         await t.WithParsedAsync(RunOptions);
         t.WithNotParsed(errs => DisplayHelp(t));
@@ -49,10 +53,26 @@ internal static class Program
         await analyzer.Analyze();
         var groups = Grouping.GroupDependencies(analyzer.Data);
 
-        using var renderer = new MermaidMarkdown();
+        IRenderer? renderer = null;
+        switch (opts.Format)
+        {
+            case Format.Json:
+            {
+                renderer = new Json();
+                break;
+            }
+            case Format.MermaidMd:
+            default:
+            {
+                renderer = new MermaidMarkdown();
+                break;
+            }
+        }
+
         var stream = await renderer.Render(groups);
         var output = await new StreamReader(stream).ReadToEndAsync();
         Console.Write(output);
+        renderer.Dispose();
     }
 
     private static string ToAbsolutePath(this string input)

@@ -121,6 +121,17 @@ public sealed class SourceSelectionStepDefinitions
         await Verifier.Verify(_output);
     }
     
+    [Then("json can be generated")]
+    public async Task RenderJson()
+    {
+        var groups = Grouping.GroupDependencies(_analyzer.Data);
+
+        using var renderer = new Json();
+        var stream = await renderer.Render(groups);
+        _output = await new StreamReader(stream).ReadToEndAsync();
+        await Verifier.VerifyJson(_output);
+    }
+    
     [Then("{string} is an event")]
     public void IsAnEvent(string className)
     {
