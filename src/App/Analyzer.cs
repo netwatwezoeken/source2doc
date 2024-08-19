@@ -31,7 +31,7 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                 Types.Add(from);
                 var to = new CSharpType(new CSharpTypeIdentifier(handler.FullNamespace(), handler.Name), Type.Handler);
                 Types.Add(to);
-                Dependencies.Add(new Dependency(from, to, null));
+                Dependencies.Add(new Dependency(from.Id, to.Id, null));
             }
         }
         
@@ -69,7 +69,7 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                 Types.Add(from);
                 var to = new CSharpType(new CSharpTypeIdentifier(matchedEvent.FullNamespace(), matchedEvent.Name), Type.Event);
                 Types.Add(to);
-                eventThrowwers.Add(new Dependency(from, to, loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
+                eventThrowwers.Add(new Dependency(from.Id, to.Id, loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
             }
             catch (InvalidOperationException)
             {
@@ -85,7 +85,7 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
                 Types.Add(from);
                 var to = new CSharpType(new CSharpTypeIdentifier(matchedEvent.FullNamespace(), matchedEvent.Name), Type.Handler);
                 Types.Add(to);
-                eventThrowwers.Add(new Dependency(from, to, loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
+                eventThrowwers.Add(new Dependency(from.Id, to.Id, loc.Location?.GetMappedLineSpan().StartLinePosition.ToDomain()));
             }
         }
     }
@@ -95,14 +95,20 @@ public class Analyzer(Workspace workspace, Compiler compiler, string[] events, s
         var derivateDependencies = new HashSet<Dependency>();
         foreach (var dependency in Dependencies)
         {
-            var symbol = compiler.Symbols.FirstOrDefault(s => s.Name == dependency.From.Id.Name);
+            var symbol = compiler.Symbols.FirstOrDefault(s => s.Name == dependency.From.Name);
             if (symbol == null) continue;
             var derivatives = await SymbolFinder.FindDerivedClassesAsync(symbol, workspace.CurrentSolution);
-            foreach (var derivative in derivatives.Select(derivative => 
-                         new Dependency(new CSharpType(new CSharpTypeIdentifier(derivative.FullNamespace(), derivative.Name), dependency.From.Type), dependency.From, null)))
+            foreach (var derivative in derivatives)//.Select(derivative => 
+                        // new Dependency(new CSharpTypeIdentifier(derivative.FullNamespace(), derivative.Name), dependency.From, null)))
             {
-                Types.Add(derivative.From);
-                derivateDependencies.Add(derivative);
+                var from = new CSharpTypeIdentifier(derivative.FullNamespace(), derivative.Name);
+                var dep = new Dependency(from, dependency.From,
+                    null);
+                var type = Types.Single(t => 
+                    t.Id == new CSharpTypeIdentifier(dependency.From.Namespace, dependency.From.Name))
+                    .Type;
+                Types.Add(new CSharpType(from, type));
+                derivateDependencies.Add(dep);
             }
         }
         Dependencies.AddRange(derivateDependencies);

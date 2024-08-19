@@ -68,69 +68,45 @@
     Dependencies: [
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: CommandA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: CommandA
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: CommandAHandler1
-          },
-          Type: Handler
+          Namespace: MediatrCode,
+          Name: CommandAHandler1
         },
         Position: null
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: CommandA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: CommandA
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: CommandAHandler2
-          },
-          Type: Handler
+          Namespace: MediatrCode,
+          Name: CommandAHandler2
         },
         Position: null
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: CommandB
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: CommandB
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: CommandAHandler2
-          },
-          Type: Handler
+          Namespace: MediatrCode,
+          Name: CommandAHandler2
         },
         Position: null
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: Program
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: Program
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: CommandA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: CommandA
         },
         Position: {
           Line: 20,
@@ -139,18 +115,12 @@
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: Program
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: Program
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: RequestA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: RequestA
         },
         Position: {
           Line: 21,
@@ -159,52 +129,34 @@
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: RequestA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: RequestA
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: RequestAHandler1
-          },
-          Type: Handler
+          Namespace: MediatrCode,
+          Name: RequestAHandler1
         },
         Position: null
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: RequestA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: RequestA
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: RequestAHandler2
-          },
-          Type: Handler
+          Namespace: MediatrCode,
+          Name: RequestAHandler2
         },
         Position: null
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: SenderB2
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: SenderB2
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: CommandB
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: CommandB
         },
         Position: {
           Line: 8,
@@ -275,69 +227,45 @@
     Dependencies: [
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: DerivedNotificationA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: DerivedNotificationA
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: NotificationA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: NotificationA
         },
         Position: null
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: DerivedSenderA1
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: DerivedSenderA1
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: SenderA1
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: SenderA1
         },
         Position: null
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: DerivedSenderA1ThatOverrides
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: DerivedSenderA1ThatOverrides
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: SenderA1
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: SenderA1
         },
         Position: null
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: DerivedSenderA1ThatOverrides
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: DerivedSenderA1ThatOverrides
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: NotificationB
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: NotificationB
         },
         Position: {
           Line: 18,
@@ -346,35 +274,23 @@
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: NotificationA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: NotificationA
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: NotificationAHandler1
-          },
-          Type: Handler
+          Namespace: MediatrCode,
+          Name: NotificationAHandler1
         },
         Position: null
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: SenderA1
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: SenderA1
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: NotificationA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: NotificationA
         },
         Position: {
           Line: 8,
@@ -383,18 +299,12 @@
       },
       {
         From: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: SenderA2
-          },
-          Type: Publisher
+          Namespace: MediatrCode,
+          Name: SenderA2
         },
         To: {
-          Id: {
-            Namespace: MediatrCode,
-            Name: NotificationA
-          },
-          Type: Event
+          Namespace: MediatrCode,
+          Name: NotificationA
         },
         Position: {
           Line: 8,

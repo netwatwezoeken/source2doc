@@ -101,7 +101,7 @@ public sealed class SourceSelectionStepDefinitions
     [Then("dependency {string} to {string} is listed")]
     public void NumberOfDependencies(string from, string to)
     {
-        Assert.Contains(_analyzer.Data.Dependencies, d => d.From.Id.Name == from && d.To.Id.Name == to);
+        Assert.Contains(_analyzer.Data.Dependencies, d => d.From.Name == from && d.To.Name == to);
     }
     
     [Then("class {string} is of type {string}")]

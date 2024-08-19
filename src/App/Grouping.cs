@@ -43,10 +43,10 @@ public static class Grouping
                 deplist.AddRange(group.Dependencies.Select(d => d.To));
 
                 var types = dependencies.Types.Where(t =>
-                    deplist.Contains(t)).OrderBy(t => t.Id.ToString()).ToList();
+                    deplist.Contains(t.Id)).OrderBy(t => t.Id.ToString()).ToList();
                 
                 var sortedGroup = new DependencyGroup(
-                    Dependencies: group.Dependencies.OrderBy(d => d.From.Id.ToString()).ToList(), 
+                    Dependencies: group.Dependencies.OrderBy(d => d.From.ToString()).ToList(), 
                     Types: types.ToList());
                 
                 depGroups.Groups.Add(sortedGroup);

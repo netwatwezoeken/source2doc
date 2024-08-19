@@ -1,3 +1,3 @@
 namespace App;
 
-public record Dependency(CSharpType From, CSharpType To, LinePosition? Position);
+public record Dependency(CSharpTypeIdentifier From, CSharpTypeIdentifier To, LinePosition? Position);

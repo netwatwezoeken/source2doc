@@ -40,7 +40,7 @@ public sealed class GroupingStepDefinitions
     [Then("group {int} number {int} is {string}")]
     public void NumberOfDependencies(int group, int index, string dependency)
     {
-        Assert.Equal(dependency, _dependenciyGroups.Groups[group].Dependencies[index].From.Id.ToString());
+        Assert.Equal(dependency, _dependenciyGroups.Groups[group].Dependencies[index].From.ToString());
     }
 }
 
@@ -58,6 +58,6 @@ public class CSharpTypeRetriever : IValueRetriever
 
     public object Retrieve(KeyValuePair<string, string> keyValuePair, System.Type targetType, System.Type propertyType)
     {
-        return new CSharpType(new CSharpTypeIdentifier(keyValuePair.Value));
+        return new CSharpTypeIdentifier(keyValuePair.Value);
     }
 }
