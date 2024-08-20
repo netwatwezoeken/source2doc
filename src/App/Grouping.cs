@@ -4,8 +4,8 @@ public static class Grouping
 {
     public static DependencyModel GroupDependencies(DependencyGroup dependencies)
     {
-        var depGroups = new DependencyModel(new List<DependencyGroup>{});
-        var dict = dependencies.Dependencies.ToDictionary(h => h, h => false);
+        var depGroups = new DependencyModel(new List<DependencyGroup>());
+        var dict = dependencies.Dependencies.ToDictionary(d => d, _ => false);
         var group = new DependencyGroup(new List<CSharpType>(), new List<Dependency>());
         foreach (var dep in dict)
         {
