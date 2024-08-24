@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="feature2markdown.feature" />
     <None Include="Features\Grouping.feature" />
     <None Include="Features\Mediatr.feature" />
     <None Include="Features\SourceSelection.feature" />

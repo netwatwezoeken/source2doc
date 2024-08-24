@@ -18,7 +18,13 @@ Scenario: Cyclic dependencies belong in one group
 	Then 1 groups exist
 
 Scenario: Dependencies get sorted
-	Given these dependencies
+	Given these types
+	  | Identifier       | Type  |
+	  | Dependency.One   | Event |
+	  | Dependency.Two   | Event |
+	  | Dependency.Three | Event |
+	  | Dependency.Four  | Event |
+	And these dependencies
 	  | From             | To              |
 	  | Dependency.One   | Dependency.Two  |
 	  | Dependency.Three | Dependency.Four |
@@ -31,3 +37,25 @@ Scenario: Dependencies get sorted
 	  | 0     | 0     | "Dependency.Four"  |
 	  | 0     | 1     | "Dependency.One"   |
 	  | 0     | 2     | "Dependency.Three" |
+
+Scenario: Types get sorted
+	Given these types
+	  | Id               | Type  |
+	  | Dependency.One   | Event |
+	  | Dependency.Two   | Event |
+	  | Dependency.Three | Event |
+	  | Dependency.Four  | Event |
+	And these dependencies
+	  | From             | To              |
+	  | Dependency.One   | Dependency.Two  |
+	  | Dependency.Three | Dependency.Four |
+	  | Dependency.Four  | Dependency.One  |
+	When grouped
+	Then group <group> type at index <index> is <id>
+	
+	Examples:
+	  | group | index | id                 |
+	  | 0     | 0     | "Dependency.Four"  |
+	  | 0     | 1     | "Dependency.One"   |
+	  | 0     | 2     | "Dependency.Three" |
+	  | 0     | 3     | "Dependency.Two"   |
