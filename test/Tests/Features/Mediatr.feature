@@ -10,7 +10,7 @@ Scenario: Amount of dependencies
 	
 Scenario: Amount of types
 	When code is analyzed
-	Then 17 types are created
+	Then "17" types are created
 
 Scenario Outline: Classes that throw events are detected
 	When code is analyzed

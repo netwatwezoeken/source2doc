@@ -13,6 +13,9 @@ public class Options
     [Option('s', "source", Required = false, HelpText = "path to source code. default is './'")]
     public required string Source { get; set; }
     
+    [Option("exclude", Required = false, HelpText = "path to source code. default is './'")]
+    public required string Exclude { get; set; }
+    
     [Option('l', "libraries", Required = false, HelpText = "additional libraries to process.")]
     public IEnumerable<string> Libraries  { get; set; } = [];
 
@@ -21,6 +24,9 @@ public class Options
     
     [Option('o', "output", Required = false, HelpText = "write to specified file")]
     public string? File { get; set; }
+    
+    [Option('c', "config", Required = false, HelpText = "config file")]
+    public string? Config { get; set; }
 }
 
 public enum Format

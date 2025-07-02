@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using App.Renderers;
-using Reqnroll.UnitTestProvider;
 using VerifyXunit;
 
 namespace Tests.StepDefinitions;
@@ -12,16 +11,12 @@ namespace Tests.StepDefinitions;
 public sealed class SourceSelectionStepDefinitions
 {
     private Compiler _compiler;
-    private readonly IUnitTestRuntimeProvider _unitTestRuntimeProvider;
     private Analyzer _analyzer;
     private string _output;
-
-    public SourceSelectionStepDefinitions(IUnitTestRuntimeProvider unitTestRuntimeProvider)
-    {
-        _unitTestRuntimeProvider = unitTestRuntimeProvider;
-    }
     
-    [Given("source code {string} and mediatr libs")]
+    [Given("""
+           source code "(.*)" and mediatr libs
+           """)]
     public async Task GivenASinglePathAndMediatrLibs(string path)
     {
         var baseDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -79,32 +74,40 @@ public sealed class SourceSelectionStepDefinitions
         Assert.Equal(result, _compiler.Symbols.Count);
     }
     
-    [Then(@"{string} is a listed symbol")]
+    [Then("""
+          "(.*)" is a listed symbol
+          """)]
     public void IsASymbol(string symbol)
     {
         Assert.Contains(symbol, 
             _compiler.Symbols.Select(s => $"{s.FullNamespace()}.{s.Name}"));
     }
     
-    [Then("{int} dependencies are created")]
+    [Then(@"(.*) dependencies are created")]
     public void NumberOfDependencies(int number)
     {
         Assert.Equal(number, _analyzer.Data.Dependencies.Count());
     }
     
-    [Then("{int} types are created")]
+    [Then("""
+          "(.*)" types are created
+          """)]
     public void NumberOfTypes(int number)
     {
         Assert.Equal(number, _analyzer.Data.Types.Count());
     }
     
-    [Then("dependency {string} to {string} is listed")]
+    [Then("""
+          dependency "(.*)" to "(.*)" is listed
+          """)]
     public void NumberOfDependencies(string from, string to)
     {
         Assert.Contains(_analyzer.Data.Dependencies, d => d.From.Name == from && d.To.Name == to);
     }
     
-    [Then("class {string} is of type {string}")]
+    [Then("""
+          class "(.*)" is of type "(.*)"
+          """)]
     public void ClasIfType(string className, string type)
     {
         Assert.Equal(type, _analyzer.Data.Types.FirstOrDefault(d => d.Id.Name == className)?.Type.ToString());
@@ -132,19 +135,25 @@ public sealed class SourceSelectionStepDefinitions
         await Verifier.VerifyJson(_output);
     }
     
-    [Then("{string} is an event")]
+    [Then("""
+          "(.*)" is an event
+          """)]
     public void IsAnEvent(string className)
     {
         IsA(className, Type.Event);
     }
     
-    [Then("{string} is a publisher")]
+    [Then("""
+          "(.*)" is a publisher
+          """)]
     public void IsAPublisher(string className)
     {
         IsA(className, Type.Publisher);
     }
     
-    [Then("{string} is a handler")]
+    [Then("""
+          "(.*)" is a handler
+          """)]
     public void IsAHandler(string className)
     {
         IsA(className, Type.Handler);

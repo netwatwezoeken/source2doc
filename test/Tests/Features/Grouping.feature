@@ -6,7 +6,7 @@ Scenario: Simple grouping
 	| Dependency.One   | Dependency.Two  |
 	| Dependency.Three | Dependency.Four |
 	When grouped
-	Then 2 groups exist
+	Then "2" groups exist
 
 Scenario: Cyclic dependencies belong in one group
 	Given these dependencies
@@ -15,7 +15,7 @@ Scenario: Cyclic dependencies belong in one group
 	  | Dependency.Three | Dependency.Four |
 	  | Dependency.Four  | Dependency.One  |
 	When grouped
-	Then 1 groups exist
+	Then "1" groups exist
 
 Scenario: Dependencies get sorted
 	Given these types

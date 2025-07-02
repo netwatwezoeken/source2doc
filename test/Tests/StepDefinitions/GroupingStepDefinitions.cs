@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Reqnroll.Assist;
 using Type = App.Type;
 
@@ -14,7 +12,6 @@ public sealed class GroupingStepDefinitions
     {
         Service.Instance.ValueRetrievers.Register(new CSharpTypeIdentifierRetriever());
         Service.Instance.ValueRetrievers.Register(new TypeRetriever());
-        //Service.Instance.ValueRetrievers.Register(new CSharpTypeRetriever());
     }
 
     private DependencyModel _dependenciyGroups;
@@ -49,19 +46,21 @@ public sealed class GroupingStepDefinitions
         _dependenciyGroups = Grouping.GroupDependencies(_unsortedGroup);
     }
     
-    [Then(@"{int} groups exist")]
+    [Then("""
+          "(.*)" groups exist
+          """)]
     public void GivenTheseProductsExist(int number)
     {
         Assert.Equal(number, _dependenciyGroups.Groups.Count);
     }
         
-    [Then("group {int} number {int} is {string}")]
+    [Then(@"group (.*) number (.*) is (.*)")]
     public void IndexOfDependencies(int group, int index, string dependency)
     {
         Assert.Equal(dependency, _dependenciyGroups.Groups[group].Dependencies[index].From.ToString());
     }
-    
-    [Then("group {int} type at index {int} is {string}")]
+
+    [Then(@"group (.*) type at index (.*) is (.*)")]
     public void IndexOfTypes(int group, int index, string dependency)
     {
         Assert.Equal(dependency, _dependenciyGroups.Groups[group].Types[index].Id.ToString());
@@ -103,20 +102,3 @@ public class TypeRetriever : IValueRetriever
         return Type.Publisher;
     }
 }
-
-// public class CSharpTypeRetriever : IValueRetriever
-// {
-//     public bool CanRetrieve(KeyValuePair<string, string> keyValuePair, System.Type targetType, System.Type propertyType)
-//     {
-//         if (!keyValuePair.Key.Equals("Identifier"))
-//         {
-//             return false;
-//         }
-//         return true;
-//     }
-//
-//     public object Retrieve(KeyValuePair<string, string> keyValuePair, System.Type targetType, System.Type propertyType)
-//     {
-//         return new CSharpType(new CSharpTypeIdentifier(keyValuePair.Value), Type.Event);
-//     }
-// }
